@@ -1,0 +1,25 @@
+from PIL import Image
+import maskGen as mg
+import os
+import cv2
+import numpy as np
+source_folder = os.path.join(os.getcwd(),"finalMasks")
+print(mg.subMaskCount)
+for i in range(2, len(mg.subMaskCount)+2):
+    for j in range(2,mg.subMaskCount[i-2]+1):
+        if j==2:
+            path1 = f"images\image{i-1}\masks\image{i-1}_{j-1}.png"
+            path2 = f"images\image{i-1}\masks\image{i-1}_{j}.png"
+            img1 = Image.open(path1)
+        # Opening the secondary image (overlay image)
+            img2 = Image.open(path2)
+        # Pasting img2 image on top of img1
+        else:
+            path2 = f"images\image{i-1}\masks\image{i-1}_{j}.png"
+            img2 = Image.open(path2)
+        # starting at coordinates (0, 0)
+        img1.paste(img2, (0,0), mask = img2)
+    # final_mask = os.path.join(source_folder,f"image{i-1}")
+    # os.mkdir(final_mask)
+    cv2.imwrite(os.path.join(source_folder, f"image{i-1}" + ".png"), np.array(img1))
+        # Displaying the image
